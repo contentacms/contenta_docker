@@ -1,0 +1,43 @@
+version: '2'
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: contenta_nginx
+    links:
+      - php
+    volumes_from:
+      - php
+    network_mode: bridge
+  php:
+    build: ./php
+    ports:
+      - "9000:9000"
+    volumes:
+      - ../www:/var/www
+    env_file:
+      - .env
+    links:
+      - database      
+    container_name: contenta_php
+    network_mode: bridge
+  database:
+    build: ./database
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./db-seeds:/docker-entrypoint-initdb.d/
+    env_file:
+      - .env
+    container_name: contenta_db
+    network_mode: bridge
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    container_name: contenta_mailhog
+    network_mode: bridge
