@@ -4,27 +4,4 @@ ep /etc/php.ini
 ep /etc/php-fpm.conf
 ep /etc/php-fpm.d/*
 
-
-# @TODO: Sort of semaphore process to ensure that the db is there when we run the drush commands.
-#BOOTSTRAP=`drush status bootstrap | grep "Successful" | wc -l`
-#until [ "$BOOTSTRAP" -ge "1" ]; do
-#  >&2 echo "Waiting for Drupal to be ready"
-#  if mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -D$MYSQL_DATABASE -e"show tables" -hdatabase &>/dev/null; then
-#    echo "Database connection successful"
-#    MYSQL_TEST=`mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -D$MYSQL_DATABASE -e"show tables" -hdatabase | wc -l`
-#    if [ "$MYSQL_TEST" -le "0" ]; then
-        drush si -y contenta_jsonapi --account-pass=test --db-url=mysql://$MYSQL_USER:$MYSQL_PASSWORD@database/$MYSQL_DATABASE
-#    fi
-#  fi
-
-#  BOOTSTRAP=`drush status bootstrap | grep "Successful" | wc -l`
-#  sleep 5
-#done
-
-# ULI party
-echo "--------------------------------------------------------------------------"
-echo "****************************** Here's a uli ******************************"
-drush uli
-echo "--------------------------------------------------------------------------"
-
 exec "$@"

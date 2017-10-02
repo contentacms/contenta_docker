@@ -28,23 +28,12 @@ RUN yum install -y epel-release \
         php-pecl-redis \
         mariadb \
         git \
+        patch \
+        openssl \
         unzip \
         wget && \
     yum --enablerepo=epel install -y fcgi && \
     yum clean all
-
-COPY docker-entrypoint /usr/local/bin/
-COPY conf/php-fpm.conf conf/php.ini /etc/
-COPY conf/www.conf /etc/php-fpm.d/www.conf
-
-RUN mkdir -p /var/www && \
-    fix-permissions /etc/php.ini && \
-    fix-permissions /etc/php-fpm.conf && \
-    fix-permissions /etc/php-fpm.d/ && \
-    fix-permissions /run/php-fpm && \
-    fix-permissions /var/www && \
-    fix-permissions /var/lib/php/session/ && \
-    chmod +x /usr/local/bin/docker-entrypoint
 
 # Install Composer
 ENV COMPOSER_VERSION 1.4.2
@@ -63,10 +52,25 @@ RUN mkdir -p /usr/local/src && \
     cd drush && \
     composer install
 
+COPY docker-entrypoint /usr/local/bin/
+COPY init-drupal /usr/local/bin/
+COPY conf/php-fpm.conf conf/php.ini /etc/
+COPY conf/www.conf /etc/php-fpm.d/www.conf
+
+RUN mkdir -p /var/www && \
+    fix-permissions /etc/php.ini && \
+    fix-permissions /etc/php-fpm.conf && \
+    fix-permissions /etc/php-fpm.d/ && \
+    fix-permissions /run/php-fpm && \
+    fix-permissions /var/www && \
+    fix-permissions /var/lib/php/session/ && \
+    chmod +x /usr/local/bin/docker-entrypoint && \
+    chmod +x /usr/local/bin/init-drupal
+
 RUN cd /usr/local/src && \
-    wget https://github.com/contentacms/contenta_jsonapi/archive/8.x-1.x.zip && \
-    unzip 8.x-1.x.zip -d contenta_jsonapi && \
+    git clone https://github.com/contentacms/contenta_jsonapi && \    
     cd /usr/local/src/contenta_jsonapi && \
+    git checkout 836683de603741e9e3beebac1b047e34c684a69c && \
     composer create-project contentacms/contenta-jsonapi-project /var/www --stability dev --no-interaction && \
     cd /var/www && \
     composer config repositories.contenta_jsonapi path .
