@@ -5,6 +5,7 @@ RUN yum install -y epel-release \
         http://rpms.remirepo.net/enterprise/remi-release-7.rpm  \
         yum-utils && \
     yum-config-manager --enable remi-php70 && \
+    yum update -y && \
     yum install -y \
         php-bcmath \
         php-cli \
