@@ -4,7 +4,7 @@ FROM amazeeio/centos:7
 RUN yum install -y epel-release \
         http://rpms.remirepo.net/enterprise/remi-release-7.rpm  \
         yum-utils && \
-    yum-config-manager --enable remi-php70 && \
+    yum-config-manager --enable remi-php71 && \
     yum update -y && \
     yum install -y \
         php-bcmath \
