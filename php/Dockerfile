@@ -69,9 +69,8 @@ RUN mkdir -p /var/www && \
     chmod +x /usr/local/bin/init-drupal
 
 RUN cd /usr/local/src && \
-    git clone https://github.com/contentacms/contenta_jsonapi && \    
+    git clone https://github.com/contentacms/contenta_jsonapi && \
     cd /usr/local/src/contenta_jsonapi && \
-    git checkout 836683de603741e9e3beebac1b047e34c684a69c && \
     composer create-project contentacms/contenta-jsonapi-project /var/www --stability dev --no-interaction && \
     cd /var/www && \
     composer config repositories.contenta_jsonapi path .
