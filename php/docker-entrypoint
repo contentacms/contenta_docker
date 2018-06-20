@@ -4,4 +4,6 @@ ep /etc/php.ini
 ep /etc/php-fpm.conf
 ep /etc/php-fpm.d/*
 
+[ ! -e /run/php-fpm ] && mkdir -p /run/php-fpm
+
 exec "$@"

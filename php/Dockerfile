@@ -59,6 +59,7 @@ COPY conf/php-fpm.conf conf/php.ini /etc/
 COPY conf/www.conf /etc/php-fpm.d/www.conf
 
 RUN mkdir -p /var/www && \
+    mkdir -p /run/php-fpm  && \
     fix-permissions /etc/php.ini && \
     fix-permissions /etc/php-fpm.conf && \
     fix-permissions /etc/php-fpm.d/ && \
