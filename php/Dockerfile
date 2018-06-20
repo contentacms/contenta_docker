@@ -37,13 +37,13 @@ RUN yum install -y epel-release \
     yum clean all
 
 # Install Composer
-ENV COMPOSER_VERSION 1.4.2
+ENV COMPOSER_VERSION 1.6.5
 RUN	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
   chmod +x /usr/local/bin/composer && \
   composer global require "hirak/prestissimo:^0.3"
 
 # Install Drush using Composer.
-ENV DRUSH_VERSION 8.1.11
+ENV DRUSH_VERSION 8.1.17
 RUN mkdir -p /usr/local/src && \
     cd /usr/local/src && \
     wget https://github.com/drush-ops/drush/archive/${DRUSH_VERSION}.tar.gz && \
