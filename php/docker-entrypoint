@@ -6,4 +6,13 @@ ep /etc/php-fpm.d/*
 
 [ ! -e /run/php-fpm ] && mkdir -p /run/php-fpm
 
+# @TODO: Add some checks in case the directories already exist.
+cd /usr/local/src
+git clone https://github.com/contentacms/contenta_jsonapi
+cd /usr/local/src/contenta_jsonapi
+composer create-project contentacms/contenta-jsonapi-project /var/www/. --stability dev --no-progress --no-interaction
+cd /var/www
+composer config repositories.contenta_jsonapi path .
+
+
 exec "$@"

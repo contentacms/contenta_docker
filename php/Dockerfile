@@ -20,6 +20,7 @@ RUN yum install -y epel-release \
         php-tidy \
         php-mbstring \
         php-opcache \
+        php-pcntl \
         php-pdo \
         php-pecl-apcu \
         php-pecl-apcu-bc \
@@ -27,6 +28,7 @@ RUN yum install -y epel-release \
         php-pecl-igbinary \
         php-pecl-imagick \
         php-pecl-redis \
+        php-pecl-xdebug \
         mariadb \
         git \
         patch \
@@ -37,13 +39,14 @@ RUN yum install -y epel-release \
     yum clean all
 
 # Install Composer
-ENV COMPOSER_VERSION 1.4.2
+ENV COMPOSER_VERSION 1.7.2
 RUN	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
   chmod +x /usr/local/bin/composer && \
-  composer global require "hirak/prestissimo:^0.3"
+  composer global require "hirak/prestissimo:^0.3" && \
+  composer --global config process-timeout 2000
 
 # Install Drush using Composer.
-ENV DRUSH_VERSION 8.1.11
+ENV DRUSH_VERSION 8.1.17
 RUN mkdir -p /usr/local/src && \
     cd /usr/local/src && \
     wget https://github.com/drush-ops/drush/archive/${DRUSH_VERSION}.tar.gz && \
@@ -58,25 +61,16 @@ COPY init-drupal /usr/local/bin/
 COPY conf/php-fpm.conf conf/php.ini /etc/
 COPY conf/www.conf /etc/php-fpm.d/www.conf
 
-RUN mkdir -p /var/www && \
-    mkdir -p /run/php-fpm  && \
+RUN mkdir -p /run/php-fpm  && \
     fix-permissions /etc/php.ini && \
     fix-permissions /etc/php-fpm.conf && \
     fix-permissions /etc/php-fpm.d/ && \
     fix-permissions /run/php-fpm && \
-    fix-permissions /var/www && \
     fix-permissions /var/lib/php/session/ && \
     chmod +x /usr/local/bin/docker-entrypoint && \
     chmod +x /usr/local/bin/init-drupal
 
-RUN cd /usr/local/src && \
-    git clone https://github.com/contentacms/contenta_jsonapi && \
-    cd /usr/local/src/contenta_jsonapi && \
-    composer create-project contentacms/contenta-jsonapi-project /var/www --stability dev --no-interaction && \
-    cd /var/www && \
-    composer config repositories.contenta_jsonapi path .
-
-WORKDIR /var/www/web
+WORKDIR /var/www
 
 EXPOSE 9000
 
