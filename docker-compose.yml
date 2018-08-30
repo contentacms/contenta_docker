@@ -8,7 +8,7 @@ services:
     networks:
       - contenta
     volumes:
-      - www:/var/www
+      - ./www:/var/www:cached
     # this ensures that nginx's upstream host "php" will always have
     # valid DNS when we're starting up
     depends_on:
@@ -18,7 +18,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - www:/var/www
+      - ./www:/var/www:cached
     env_file:
       - .env
     networks:
@@ -31,12 +31,11 @@ services:
       - data:/var/lib/mysql
     env_file:
       - .env
-    networks: 
+    networks:
       - contenta
 
 volumes:
   data:
-  www:
 
 networks:
-  contenta: 
+  contenta:
