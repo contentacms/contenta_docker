@@ -57,18 +57,17 @@ RUN mkdir -p /usr/local/src && \
     composer install
 
 COPY docker-entrypoint /usr/local/bin/
-COPY init-drupal /usr/local/bin/
 COPY conf/php-fpm.conf conf/php.ini /etc/
 COPY conf/www.conf /etc/php-fpm.d/www.conf
 
-RUN mkdir -p /run/php-fpm  && \
+RUN mkdir -p /var/www  && \
+    mkdir -p /run/php-fpm  && \
     fix-permissions /etc/php.ini && \
     fix-permissions /etc/php-fpm.conf && \
     fix-permissions /etc/php-fpm.d/ && \
     fix-permissions /run/php-fpm && \
     fix-permissions /var/lib/php/session/ && \
-    chmod +x /usr/local/bin/docker-entrypoint && \
-    chmod +x /usr/local/bin/init-drupal
+    chmod +x /usr/local/bin/docker-entrypoint
 
 WORKDIR /var/www
 

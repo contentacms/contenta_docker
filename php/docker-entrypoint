@@ -14,5 +14,4 @@ composer create-project contentacms/contenta-jsonapi-project /var/www/. --stabil
 cd /var/www
 composer config repositories.contenta_jsonapi path .
 
-
 exec "$@"
