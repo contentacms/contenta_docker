@@ -11,8 +11,6 @@ The container doesn't automatically run `drush site-install` because we want it 
 
 `docker-compose exec php composer run-script install:with-mysql`
 
-When it finishes successfully, the command will output a one-time login URL.
-
 # Persistence
 
 Persistent state is stored in a database volume named `data`. You can destroy and recreate the containers as much as you like and your site will be preserved until you also destroy the volume.
