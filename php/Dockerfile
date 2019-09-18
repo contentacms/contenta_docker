@@ -39,7 +39,7 @@ RUN yum install -y epel-release \
     yum clean all
 
 # Install Composer
-ENV COMPOSER_VERSION 1.7.2
+ENV COMPOSER_VERSION 1.9.0
 RUN	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
   chmod +x /usr/local/bin/composer && \
   composer global require "hirak/prestissimo:^0.3" && \
