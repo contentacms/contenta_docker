@@ -43,18 +43,10 @@ ENV COMPOSER_VERSION 1.9.0
 RUN	curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
   chmod +x /usr/local/bin/composer && \
   composer global require "hirak/prestissimo:^0.3" && \
-  composer --global config process-timeout 2000
-
-# Install Drush using Composer.
-ENV DRUSH_VERSION 8.1.17
-RUN mkdir -p /usr/local/src && \
-    cd /usr/local/src && \
-    wget https://github.com/drush-ops/drush/archive/${DRUSH_VERSION}.tar.gz && \
-    tar -xzf ${DRUSH_VERSION}.tar.gz && \
-    mv drush-${DRUSH_VERSION} drush && \
-    ln -s /usr/local/src/drush/drush /usr/bin/drush && \
-    cd drush && \
-    composer install
+  composer global require consolidation/cgr && \
+  composer --global config process-timeout 2000 && \
+  export PATH="$HOME/.composer/vendor/bin:$PATH" && \
+  cgr drush/drush
 
 COPY docker-entrypoint /usr/local/bin/
 COPY conf/php-fpm.conf conf/php.ini /etc/
