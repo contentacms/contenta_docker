@@ -6,12 +6,16 @@ ep /etc/php-fpm.d/*
 
 [ ! -e /run/php-fpm ] && mkdir -p /run/php-fpm
 
-# @TODO: Add some checks in case the directories already exist.
-cd /usr/local/src
-git clone https://github.com/contentacms/contenta_jsonapi
-cd /usr/local/src/contenta_jsonapi
-composer create-project contentacms/contenta-jsonapi-project /var/www/. --stability dev --no-progress --no-interaction
-cd /var/www
-composer config repositories.contenta_jsonapi path .
+if [ "$(ls -A /var/www/)" ]; then
+    echo "Contenta already installed, please update manually if you need to."
+else
+    echo "Installing contenta"
+    cd /usr/local/src
+    git clone https://github.com/contentacms/contenta_jsonapi
+    cd /usr/local/src/contenta_jsonapi
+    COMPOSER_MEMORY_LIMIT=-1 composer create-project contentacms/contenta-jsonapi-project /var/www/. --stability dev --no-progress --no-interaction
+    cd /var/www
+    composer config repositories.contenta_jsonapi path .
+fi
 
 exec "$@"
